@@ -76,7 +76,7 @@ export default function AIRecommendations({ recommendations }: AIRecommendations
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {latestRecommendations.map((recommendation) => {
-            const config = categoryConfig[recommendation.category];
+            const config = getCategoryConfig(recommendation.category);
             const Icon = config.icon;
             
             return (

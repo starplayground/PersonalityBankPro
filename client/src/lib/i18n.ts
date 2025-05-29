@@ -137,6 +137,7 @@ export const translations = {
     // Recommendations
     recommendations: {
       title: "AI-Powered Recommendations",
+      aiPowered: "AI-Powered Recommendations",
       completeAssessment: "Complete a personality assessment to get personalized recommendations",
       startAssessment: "Start Assessment",
       viewAll: "View All Recommendations"
@@ -308,6 +309,7 @@ export const translations = {
     // Recommendations
     recommendations: {
       title: "AI 个性化推荐",
+      aiPowered: "AI 个性化推荐",
       completeAssessment: "完成性格测评以获得个性化推荐",
       startAssessment: "开始测评",
       viewAll: "查看全部推荐"
