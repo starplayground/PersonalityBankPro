@@ -173,7 +173,7 @@ export const translations = {
   
   zh: {
     // Header
-    brandName: "性格银行",
+    brandName: "人格银行",
     nav: {
       dashboard: "仪表板",
       assessments: "测评",
