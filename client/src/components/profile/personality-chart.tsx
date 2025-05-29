@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { getPersonalityColor, formatPercentage } from "@/lib/utils";
 import { t } from "@/lib/i18n";
+import PersonalityRadarChart from "./personality-radar-chart";
 
 interface PersonalityChartProps {
   personalityProfile?: {
@@ -50,6 +51,7 @@ export default function PersonalityChart({ personalityProfile }: PersonalityChar
         <CardTitle>{t("profile.personalityOverview")}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        <PersonalityRadarChart scores={scores} />
         {Object.entries(scores).map(([trait, score]) => (
           <div key={trait}>
             <div className="flex justify-between items-center mb-2">

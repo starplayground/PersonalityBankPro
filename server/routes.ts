@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertUserAssessmentSchema, insertResponseSchema } from "@shared/schema";
-import { analyzePersonality, generateRecommendations, generateQuestions } from "./openai";
+import { analyzePersonality, generateRecommendations, generateQuestions, fetchQuestionsFromUrl } from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
@@ -97,6 +97,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const questions = await generateQuestions(category, numQuestions);
+      const assessment = await storage.createAssessment({
+        name,
+        description,
+        totalQuestions: questions.length,
+        category,
+        isActive: true,
+      });
+
+      for (const [index, q] of questions.entries()) {
+        await storage.createQuestion({
+          assessmentId: assessment.id,
+          questionText: q.questionText,
+          questionType: "likert",
+          options: q.options,
+          trait: q.trait,
+          order: index + 1,
+        });
+      }
+
+      res.json({ assessmentId: assessment.id });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Import questions from an external URL and create a new assessment
+  app.post("/api/assessments/import", async (req, res) => {
+    try {
+      const { url, name, description, category, numQuestions = 5 } = req.body;
+      if (!url || !name || !description || !category) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const questions = await fetchQuestionsFromUrl(url, numQuestions);
       const assessment = await storage.createAssessment({
         name,
         description,
