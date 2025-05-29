@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PlayCircle, Users, CheckCircle, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
+import { t } from "@/lib/i18n";
 
 // Mock user ID for demo - in real app this would come from auth
 const CURRENT_USER_ID = 1;
@@ -38,20 +39,20 @@ export default function Dashboard() {
           <div className="flex flex-col lg:flex-row items-center justify-between">
             <div className="lg:w-2/3">
               <h1 className="text-3xl font-semibold text-foreground mb-4">
-                Welcome back, <span className="text-primary">John</span> 👋
+                {t("dashboard.welcomeBack")}, <span className="text-primary">John</span> 👋
               </h1>
               <p className="text-muted-foreground text-lg mb-6">
-                Continue your personality development journey and discover new insights about yourself.
+                {t("dashboard.continueJourney")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button className="flex items-center gap-2">
                   <PlayCircle className="w-5 h-5" />
-                  Continue Assessment
+                  {t("dashboard.continueAssessment")}
                 </Button>
                 <Button variant="outline" className="flex items-center gap-2" asChild>
                   <Link href="/community">
                     <Users className="w-5 h-5" />
-                    Explore Community
+                    {t("dashboard.exploreCommunity")}
                   </Link>
                 </Button>
               </div>
@@ -72,8 +73,8 @@ export default function Dashboard() {
             {/* Assessment Progress */}
             <Card>
               <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Assessment Progress</CardTitle>
-                <Button variant="ghost" size="sm">View All</Button>
+                <CardTitle>{t("dashboard.assessmentProgress")}</CardTitle>
+                <Button variant="ghost" size="sm">{t("dashboard.viewAll")}</Button>
               </CardHeader>
               <CardContent className="space-y-4">
                 {assessmentsLoading ? (

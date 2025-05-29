@@ -1,14 +1,16 @@
 import { Brain, Bell, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import LanguageToggle from "@/components/ui/language-toggle";
 import { Link, useLocation } from "wouter";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard" },
-  { name: "Assessments", href: "/assessments" },
-  { name: "Community", href: "/community" },
-  { name: "Growth", href: "/growth" },
+  { name: t("nav.dashboard"), href: "/dashboard" },
+  { name: t("nav.assessments"), href: "/assessments" },
+  { name: t("nav.community"), href: "/community" },
+  { name: t("nav.growth"), href: "/growth" },
 ];
 
 export default function Header() {
@@ -23,7 +25,7 @@ export default function Header() {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Brain className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-semibold text-foreground">Personality Bank</span>
+              <span className="text-xl font-semibold text-foreground">{t("brandName")}</span>
             </Link>
             <div className="hidden md:flex space-x-6">
               {navigation.map((item) => (
@@ -43,6 +45,7 @@ export default function Header() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
+            <LanguageToggle />
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-primary">
               <Bell className="w-5 h-5" />
             </Button>
