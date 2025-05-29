@@ -57,6 +57,8 @@ export const personalityProfiles = pgTable("personality_profiles", {
   insights: text("insights"),
   strengths: jsonb("strengths"), // array of strengths
   growthAreas: jsonb("growth_areas"), // array of growth areas
+  hobbies: jsonb("hobbies"), // inferred hobbies or interests
+  habits: jsonb("habits"), // lifestyle or behavior habits
   createdAt: timestamp("created_at").defaultNow(),
 });
 

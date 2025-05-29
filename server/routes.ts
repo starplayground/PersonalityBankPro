@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertUserAssessmentSchema, insertResponseSchema } from "@shared/schema";
-import { analyzePersonality, generateRecommendations } from "./openai";
+import { analyzePersonality, generateRecommendations, generateQuestions } from "./openai";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
@@ -83,6 +83,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const assessments = await storage.getAssessments();
       res.json(assessments);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Generate a new assessment with AI-created questions
+  app.post("/api/assessments/generate", async (req, res) => {
+    try {
+      const { name, description, category, numQuestions = 5 } = req.body;
+      if (!name || !description || !category) {
+        return res.status(400).json({ message: "Missing required fields" });
+      }
+
+      const questions = await generateQuestions(category, numQuestions);
+      const assessment = await storage.createAssessment({
+        name,
+        description,
+        totalQuestions: questions.length,
+        category,
+        isActive: true,
+      });
+
+      for (const [index, q] of questions.entries()) {
+        await storage.createQuestion({
+          assessmentId: assessment.id,
+          questionText: q.questionText,
+          questionType: "likert",
+          options: q.options,
+          trait: q.trait,
+          order: index + 1,
+        });
+      }
+
+      res.json({ assessmentId: assessment.id });
     } catch (error: any) {
       res.status(400).json({ message: error.message });
     }
@@ -295,7 +329,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         scores: insights.scores,
         insights: insights.insights,
         strengths: insights.strengths,
-        growthAreas: insights.growthAreas
+        growthAreas: insights.growthAreas,
+        hobbies: insights.hobbies,
+        habits: insights.habits
       });
 
       // Generate AI recommendations
