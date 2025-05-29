@@ -134,12 +134,39 @@ export const translations = {
       habits: "Healthy Habits"
     },
 
+    // Recommendations
+    recommendations: {
+      title: "AI-Powered Recommendations",
+      completeAssessment: "Complete a personality assessment to get personalized recommendations",
+      startAssessment: "Start Assessment",
+      viewAll: "View All Recommendations"
+    },
+
+    // Error Messages
+    errors: {
+      assessmentNotFound: "Assessment Not Found",
+      assessmentNotExist: "The assessment you're looking for doesn't exist.",
+      questionNotFound: "Question Not Found",
+      unableToLoad: "Unable to load the current question.",
+      failedToSave: "Failed to save your answer. Please try again.",
+      tryAgain: "Please try again"
+    },
+
+    // Success Messages
+    success: {
+      assessmentCompleted: "Assessment Completed!",
+      progressSaved: "Progress Saved"
+    },
+
     // Common
     common: {
       loading: "Loading...",
-      error: "Error",
+      error: "Error", 
       tryAgain: "Please try again",
-      learnMore: "Learn More"
+      learnMore: "Learn More",
+      questionsOf: "of",
+      questionsCompleted: "questions completed",
+      viewResults: "View Results"
     }
   },
   
@@ -278,12 +305,39 @@ export const translations = {
       habits: "健康习惯"
     },
 
+    // Recommendations
+    recommendations: {
+      title: "AI 个性化推荐",
+      completeAssessment: "完成性格测评以获得个性化推荐",
+      startAssessment: "开始测评",
+      viewAll: "查看全部推荐"
+    },
+
+    // Error Messages
+    errors: {
+      assessmentNotFound: "未找到测评",
+      assessmentNotExist: "您查找的测评不存在。",
+      questionNotFound: "未找到问题",
+      unableToLoad: "无法加载当前问题。",
+      failedToSave: "保存答案失败，请重试。",
+      tryAgain: "请重试"
+    },
+
+    // Success Messages
+    success: {
+      assessmentCompleted: "测评已完成！",
+      progressSaved: "进度已保存"
+    },
+
     // Common
     common: {
       loading: "加载中...",
       error: "错误",
-      tryAgain: "请重试",
-      learnMore: "了解更多"
+      tryAgain: "请重试", 
+      learnMore: "了解更多",
+      questionsOf: "共",
+      questionsCompleted: "题已完成",
+      viewResults: "查看结果"
     }
   }
 };

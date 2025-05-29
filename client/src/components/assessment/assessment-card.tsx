@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { calculateProgress } from "@/lib/utils";
 import { Link } from "wouter";
+import { t } from "@/lib/i18n";
 
 interface AssessmentCardProps {
   userAssessment: {
@@ -32,7 +33,7 @@ export default function AssessmentCard({ userAssessment }: AssessmentCardProps) 
         <div className="flex items-center justify-between mb-3">
           <h3 className="font-medium text-foreground">{userAssessment.assessment.name}</h3>
           <span className="text-sm text-muted-foreground">
-            {userAssessment.status === 'completed' ? 'Completed' : `${progress}% Complete`}
+            {userAssessment.status === 'completed' ? t("assessment.complete") : `${progress}% ${t("assessment.complete")}`}
           </span>
         </div>
         <Progress 
@@ -41,14 +42,14 @@ export default function AssessmentCard({ userAssessment }: AssessmentCardProps) 
         />
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
-            {questionsCompleted} of {userAssessment.assessment.totalQuestions} questions completed
+            {questionsCompleted} {t("common.questionsOf")} {userAssessment.assessment.totalQuestions} {t("common.questionsCompleted")}
           </span>
           {userAssessment.status === 'completed' ? (
-            <Button variant="ghost" size="sm">View Results</Button>
+            <Button variant="ghost" size="sm">{t("common.viewResults")}</Button>
           ) : (
             <Button variant="ghost" size="sm" asChild>
               <Link href={`/assessment/${userAssessment.id}`}>
-                {questionsCompleted === 0 ? 'Start Now' : 'Continue'}
+                {questionsCompleted === 0 ? t("assessment.startNow") : t("assessment.continue")}
               </Link>
             </Button>
           )}
