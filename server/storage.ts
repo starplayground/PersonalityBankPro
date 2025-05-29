@@ -5,6 +5,8 @@ import {
   type Response, type InsertResponse, type PersonalityProfile, type InsertPersonalityProfile,
   type Recommendation, type InsertRecommendation
 } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Users
@@ -43,6 +45,161 @@ export interface IStorage {
   getRecommendations(userId: number): Promise<Recommendation[]>;
   createRecommendation(recommendation: InsertRecommendation): Promise<Recommendation>;
   markRecommendationAsRead(id: number): Promise<void>;
+}
+
+export class DatabaseStorage implements IStorage {
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async updateUser(id: number, updates: Partial<InsertUser>): Promise<User | undefined> {
+    const [user] = await db
+      .update(users)
+      .set(updates)
+      .where(eq(users.id, id))
+      .returning();
+    return user || undefined;
+  }
+
+  async getPublicUsers(): Promise<User[]> {
+    return await db.select().from(users).where(eq(users.isProfilePublic, true));
+  }
+
+  async getAssessments(): Promise<Assessment[]> {
+    return await db.select().from(assessments).where(eq(assessments.isActive, true));
+  }
+
+  async getAssessment(id: number): Promise<Assessment | undefined> {
+    const [assessment] = await db.select().from(assessments).where(eq(assessments.id, id));
+    return assessment || undefined;
+  }
+
+  async createAssessment(insertAssessment: InsertAssessment): Promise<Assessment> {
+    const [assessment] = await db
+      .insert(assessments)
+      .values(insertAssessment)
+      .returning();
+    return assessment;
+  }
+
+  async getQuestionsByAssessment(assessmentId: number): Promise<Question[]> {
+    return await db.select().from(questions).where(eq(questions.assessmentId, assessmentId));
+  }
+
+  async getQuestion(id: number): Promise<Question | undefined> {
+    const [question] = await db.select().from(questions).where(eq(questions.id, id));
+    return question || undefined;
+  }
+
+  async createQuestion(insertQuestion: InsertQuestion): Promise<Question> {
+    const [question] = await db
+      .insert(questions)
+      .values(insertQuestion)
+      .returning();
+    return question;
+  }
+
+  async getUserAssessments(userId: number): Promise<UserAssessment[]> {
+    return await db.select().from(userAssessments).where(eq(userAssessments.userId, userId));
+  }
+
+  async getUserAssessment(id: number): Promise<UserAssessment | undefined> {
+    const [userAssessment] = await db.select().from(userAssessments).where(eq(userAssessments.id, id));
+    return userAssessment || undefined;
+  }
+
+  async createUserAssessment(insertUserAssessment: InsertUserAssessment): Promise<UserAssessment> {
+    const [userAssessment] = await db
+      .insert(userAssessments)
+      .values(insertUserAssessment)
+      .returning();
+    return userAssessment;
+  }
+
+  async updateUserAssessment(id: number, updates: Partial<UserAssessment>): Promise<UserAssessment | undefined> {
+    const [userAssessment] = await db
+      .update(userAssessments)
+      .set(updates)
+      .where(eq(userAssessments.id, id))
+      .returning();
+    return userAssessment || undefined;
+  }
+
+  async getResponsesByUserAssessment(userAssessmentId: number): Promise<Response[]> {
+    return await db.select().from(responses).where(eq(responses.userAssessmentId, userAssessmentId));
+  }
+
+  async createResponse(insertResponse: InsertResponse): Promise<Response> {
+    const [response] = await db
+      .insert(responses)
+      .values(insertResponse)
+      .returning();
+    return response;
+  }
+
+  async getPersonalityProfile(userId: number, assessmentId: number): Promise<PersonalityProfile | undefined> {
+    const [profile] = await db
+      .select()
+      .from(personalityProfiles)
+      .where(eq(personalityProfiles.userId, userId))
+      .where(eq(personalityProfiles.assessmentId, assessmentId));
+    return profile || undefined;
+  }
+
+  async createPersonalityProfile(insertProfile: InsertPersonalityProfile): Promise<PersonalityProfile> {
+    const [profile] = await db
+      .insert(personalityProfiles)
+      .values(insertProfile)
+      .returning();
+    return profile;
+  }
+
+  async getLatestPersonalityProfile(userId: number): Promise<PersonalityProfile | undefined> {
+    const [profile] = await db
+      .select()
+      .from(personalityProfiles)
+      .where(eq(personalityProfiles.userId, userId))
+      .orderBy(personalityProfiles.createdAt)
+      .limit(1);
+    return profile || undefined;
+  }
+
+  async getRecommendations(userId: number): Promise<Recommendation[]> {
+    return await db
+      .select()
+      .from(recommendations)
+      .where(eq(recommendations.userId, userId))
+      .orderBy(recommendations.createdAt);
+  }
+
+  async createRecommendation(insertRecommendation: InsertRecommendation): Promise<Recommendation> {
+    const [recommendation] = await db
+      .insert(recommendations)
+      .values(insertRecommendation)
+      .returning();
+    return recommendation;
+  }
+
+  async markRecommendationAsRead(id: number): Promise<void> {
+    await db
+      .update(recommendations)
+      .set({ isRead: true })
+      .where(eq(recommendations.id, id));
+  }
 }
 
 export class MemStorage implements IStorage {
@@ -316,4 +473,4 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();
