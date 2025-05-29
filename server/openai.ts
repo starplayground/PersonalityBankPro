@@ -175,3 +175,51 @@ export async function generateQuestions(topic: string, numQuestions: number): Pr
     throw new Error("Failed to generate questions");
   }
 }
+
+export async function fetchQuestionsFromUrl(url: string, numQuestions: number = 5): Promise<GeneratedQuestion[]> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch questions: ${res.status} ${res.statusText}`);
+    }
+    const data = await res.json();
+    let questions: GeneratedQuestion[] = [];
+
+    if (Array.isArray(data)) {
+      questions = data.map((item: any) => ({
+        questionText: item.question || item.questionText || "",
+        trait: item.trait || "",
+        options: item.options || [
+          "Strongly Disagree",
+          "Disagree",
+          "Neither Agree nor Disagree",
+          "Agree",
+          "Strongly Agree",
+        ],
+      }));
+    } else if (Array.isArray(data.questions)) {
+      questions = data.questions.map((item: any) => ({
+        questionText: item.question || item.questionText || "",
+        trait: item.trait || "",
+        options: item.options || [
+          "Strongly Disagree",
+          "Disagree",
+          "Neither Agree nor Disagree",
+          "Agree",
+          "Strongly Agree",
+        ],
+      }));
+    } else {
+      throw new Error("Invalid questions format");
+    }
+
+    if (questions.length > numQuestions) {
+      questions = questions.slice(0, numQuestions);
+    }
+
+    return questions;
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    throw new Error("Failed to fetch questions");
+  }
+}
