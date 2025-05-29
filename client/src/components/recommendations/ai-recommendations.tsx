@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Zap, Briefcase, Heart, Target } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { t } from "@/lib/i18n";
 
 interface Recommendation {
   id: number;
@@ -16,25 +17,28 @@ interface AIRecommendationsProps {
   recommendations?: Recommendation[];
 }
 
-const categoryConfig = {
-  career: {
-    icon: Briefcase,
-    label: "Career Development",
-    colorClass: "from-accent/10 to-accent/5 border-accent/20",
-    iconColor: "text-accent"
-  },
-  relationships: {
-    icon: Heart,
-    label: "Relationships",
-    colorClass: "from-secondary/10 to-secondary/5 border-secondary/20",
-    iconColor: "text-secondary"
-  },
-  habits: {
-    icon: Target,
-    label: "Healthy Habits",
-    colorClass: "from-primary/10 to-primary/5 border-primary/20",
-    iconColor: "text-primary"
-  }
+const getCategoryConfig = (category: string) => {
+  const configs = {
+    career: {
+      icon: Briefcase,
+      label: t("categories.career"),
+      colorClass: "from-accent/10 to-accent/5 border-accent/20",
+      iconColor: "text-accent"
+    },
+    relationships: {
+      icon: Heart,
+      label: t("categories.relationships"),
+      colorClass: "from-secondary/10 to-secondary/5 border-secondary/20",
+      iconColor: "text-secondary"
+    },
+    habits: {
+      icon: Target,
+      label: t("categories.habits"),
+      colorClass: "from-primary/10 to-primary/5 border-primary/20",
+      iconColor: "text-primary"
+    }
+  };
+  return configs[category as keyof typeof configs];
 };
 
 export default function AIRecommendations({ recommendations }: AIRecommendationsProps) {
@@ -45,14 +49,14 @@ export default function AIRecommendations({ recommendations }: AIRecommendations
           <div className="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center">
             <Zap className="w-5 h-5 text-white" />
           </div>
-          <CardTitle>AI-Powered Recommendations</CardTitle>
+          <CardTitle>{t("recommendations.aiPowered")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
             <p className="text-muted-foreground mb-4">
-              Complete a personality assessment to get personalized recommendations
+              {t("recommendations.completeAssessment")}
             </p>
-            <Button>Start Assessment</Button>
+            <Button>{t("assessment.startNow")}</Button>
           </div>
         </CardContent>
       </Card>
