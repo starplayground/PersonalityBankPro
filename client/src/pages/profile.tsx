@@ -218,6 +218,38 @@ export default function Profile() {
               </Card>
             )}
 
+            {/* Hobbies */}
+            {personalityProfile?.hobbies && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Hobbies</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {personalityProfile.hobbies.map((hobby: string, index: number) => (
+                    <Badge key={index} variant="secondary" className="w-full justify-start">
+                      {hobby}
+                    </Badge>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Habits */}
+            {personalityProfile?.habits && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Habits</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {personalityProfile.habits.map((habit: string, index: number) => (
+                    <Badge key={index} variant="outline" className="w-full justify-start">
+                      {habit}
+                    </Badge>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
             {/* Privacy Settings */}
             {isOwnProfile && (
               <Card>

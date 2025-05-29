@@ -14,6 +14,8 @@ interface PersonalityChartProps {
       neuroticism: number;
     };
     insights?: string;
+    hobbies?: string[];
+    habits?: string[];
   };
 }
 
@@ -75,6 +77,32 @@ export default function PersonalityChart({ personalityProfile }: PersonalityChar
             <p className="text-sm text-muted-foreground leading-relaxed">
               {personalityProfile.insights}
             </p>
+          </div>
+        )}
+
+        {personalityProfile.hobbies && personalityProfile.hobbies.length > 0 && (
+          <div className="mt-4">
+            <h4 className="text-sm font-medium mb-2">Hobbies</h4>
+            <div className="flex flex-wrap gap-2">
+              {personalityProfile.hobbies.map((hobby, i) => (
+                <span key={i} className="text-xs bg-muted px-2 py-1 rounded">
+                  {hobby}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {personalityProfile.habits && personalityProfile.habits.length > 0 && (
+          <div className="mt-4">
+            <h4 className="text-sm font-medium mb-2">Habits</h4>
+            <div className="flex flex-wrap gap-2">
+              {personalityProfile.habits.map((habit, i) => (
+                <span key={i} className="text-xs border px-2 py-1 rounded">
+                  {habit}
+                </span>
+              ))}
+            </div>
           </div>
         )}
         
